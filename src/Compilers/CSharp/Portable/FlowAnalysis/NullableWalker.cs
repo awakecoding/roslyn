@@ -3249,7 +3249,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 Debug.Assert(!TrackingRegions);
 
                 // First visit everything else
-                var localFuncs = ArrayBuilder<BoundLocalFunctionStatement?>.GetInstance();
+                var localFuncs = ArrayBuilder<BoundLocalFunctionStatement?>.GetInstance(block.LocalFunctions.Length);
                 foreach (var stmt in block.Statements)
                 {
                     if (stmt is BoundLocalFunctionStatement localFunc)

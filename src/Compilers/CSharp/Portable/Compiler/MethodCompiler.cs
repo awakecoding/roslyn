@@ -506,12 +506,14 @@ namespace Microsoft.CodeAnalysis.CSharp
                 CompileMethod(marker, -1, ref processedInitializers, synthesizedSubmissionFields, compilationState);
             }
 
+            var filter = _filterOpt;
+
             for (int memberOrdinal = 0; memberOrdinal < members.Length; memberOrdinal++)
             {
                 var member = members[memberOrdinal];
 
                 //When a filter is supplied, limit the compilation of members passing the filter.
-                if (!PassesFilter(_filterOpt, member))
+                if (filter != null && !filter(member))
                 {
                     continue;
                 }
@@ -623,7 +625,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                         (init.Kind == BoundKind.FieldEqualsValue) && !((BoundFieldEqualsValue)init).Field.IsMetadataConstant));
 
                     MethodSymbol method = new SynthesizedStaticConstructor(sourceTypeSymbol);
-                    if (PassesFilter(_filterOpt, method))
+                    if (filter == null || filter(method))
                     {
                         CompileMethod(method, -1, ref processedStaticInitializers, synthesizedSubmissionFields, compilationState);
 
